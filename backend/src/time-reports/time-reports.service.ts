@@ -1,26 +1,51 @@
 import { Injectable } from '@nestjs/common';
-import { CreateTimeReportDto } from './dto/create-time-report.dto';
+import { PrismaService } from '../prisma.service';
 import { UpdateTimeReportDto } from './dto/update-time-report.dto';
 
 @Injectable()
 export class TimeReportsService {
-  create(createTimeReportDto: CreateTimeReportDto) {
-    return 'This action adds a new timeReport';
+  constructor(private prisma: PrismaService) {}
+
+  create({
+    id,
+    entries,
+  }: {
+    id: number;
+    entries: {
+      date: string;
+      hoursWorked: number;
+      employeeId: number;
+      jobGroupId: string;
+    }[];
+  }) {
+    return this.prisma.timeReport.create({
+      include: { entries: true },
+      data: {
+        id,
+        entries: {
+          create: entries,
+        },
+      },
+    });
   }
 
   findAll() {
-    return `This action returns all timeReports`;
+    return this.prisma.timeReport.findMany();
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} timeReport`;
+    return this.prisma.timeReport.findUnique({ where: { id } });
   }
 
-  update(id: number, updateTimeReportDto: UpdateTimeReportDto) {
-    return `This action updates a #${id} timeReport`;
+  update(id: number, data: UpdateTimeReportDto) {
+    // return this.prisma.timeReport.update({ where: { id }, data });
+    return 'todo';
   }
 
   remove(id: number) {
-    return `This action removes a #${id} timeReport`;
+    return this.prisma.timeReport.delete({
+      include: { entries: true },
+      where: { id },
+    });
   }
 }

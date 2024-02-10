@@ -1,8 +1,9 @@
-export class CreateTimeReportDto {}
-
-export class UploadTimeReportDto {
-  'date': string;
-  'hours worked': number;
-  'employee id': string;
-  'job group': 'A' | 'B';
+export class CreateTimeReportDto {
+  id: number;
+  entries: {
+    date: string;
+    'hours worked': number;
+    'employee id': number;
+    'job group': string;
+  }[];
 }
