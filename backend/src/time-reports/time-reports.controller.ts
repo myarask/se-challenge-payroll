@@ -21,22 +21,42 @@ export class TimeReportsController {
   constructor(private readonly timeReportsService: TimeReportsService) {}
 
   @Get()
+  /**
+   * Retrieves all time reports.
+   * @returns {Promise<TimeReport[]>} A promise that resolves to an array of time reports.
+   */
   findAll() {
     return this.timeReportsService.findAll();
   }
 
   @Get(':id')
+  /**
+   * Retrieves a time report by its ID.
+   * @param id - The ID of the time report.
+   * @returns The time report with the specified ID.
+   */
   findOne(@Param('id') id: string) {
     return this.timeReportsService.findOne(+id);
   }
 
   @Delete(':id')
+  /**
+   * Removes a time report by its ID.
+   * @param id - The ID of the time report to remove.
+   * @returns A Promise that resolves to the removed time report.
+   */
   remove(@Param('id') id: string) {
     return this.timeReportsService.remove(+id);
   }
 
   @UseInterceptors(FileInterceptor('file'))
   @Post('upload')
+  /**
+   * Uploads a file and processes it to create a time report.
+   * @param file - The file to be uploaded, must be a CSV file.
+   * @returns The created time report.
+   * @throws BadRequestException if the time report with the same id has already been uploaded.
+   */
   async uploadFile(
     @UploadedFile(
       new ParseFilePipeBuilder()
