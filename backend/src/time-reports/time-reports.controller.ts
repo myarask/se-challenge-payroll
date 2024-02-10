@@ -2,8 +2,6 @@ import {
   Controller,
   Get,
   Post,
-  Body,
-  Patch,
   Param,
   Delete,
   UploadedFile,
@@ -16,7 +14,6 @@ import { Express } from 'express';
 import { TimeReportsService } from './time-reports.service';
 import { CreateTimeReportDto } from './dto/create-time-report.dto';
 import Papa from 'papaparse';
-import { UpdateTimeReportDto } from './dto/update-time-report.dto';
 import { getISODate } from 'src/utils/dates';
 
 @Controller('time-reports')
@@ -31,14 +28,6 @@ export class TimeReportsController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.timeReportsService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updateTimeReportDto: UpdateTimeReportDto,
-  ) {
-    return this.timeReportsService.update(+id, updateTimeReportDto);
   }
 
   @Delete(':id')
@@ -71,14 +60,14 @@ export class TimeReportsController {
       );
     }
 
-    // Parse the CSV file
+    // Read the CSV file
     const content = await Papa.parse(file.buffer.toString(), {
       header: true,
       dynamicTyping: true,
       skipEmptyLines: true,
     });
 
-    // Format the data
+    // Format the CSV content
     const entries = (content.data as CreateTimeReportDto['entries']).map(
       (row) => {
         return {
