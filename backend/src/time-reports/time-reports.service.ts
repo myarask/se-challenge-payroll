@@ -32,6 +32,10 @@ export class TimeReportsService {
     return this.prisma.timeReport.findMany();
   }
 
+  findAllEntries() {
+    return this.prisma.timeReportEntry.findMany();
+  }
+
   findOne(id: number) {
     return this.prisma.timeReport.findUnique({ where: { id } });
   }
