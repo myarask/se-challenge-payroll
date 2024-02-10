@@ -9,26 +9,19 @@ import {
   UploadedFile,
   UseInterceptors,
   ParseFilePipeBuilder,
+  BadRequestException,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Express } from 'express';
 import { TimeReportsService } from './time-reports.service';
 import { CreateTimeReportDto } from './dto/create-time-report.dto';
 import Papa from 'papaparse';
-import {
-  UpdateTimeReportDto,
-  UploadTimeReportDto,
-} from './dto/update-time-report.dto';
+import { UpdateTimeReportDto } from './dto/update-time-report.dto';
 import { getISODate } from 'src/utils/dates';
 
 @Controller('time-reports')
 export class TimeReportsController {
   constructor(private readonly timeReportsService: TimeReportsService) {}
-
-  @Post()
-  create(@Body() createTimeReportDto: CreateTimeReportDto) {
-    return 'Not implemented';
-  }
 
   @Get()
   findAll() {
@@ -56,15 +49,10 @@ export class TimeReportsController {
   @UseInterceptors(FileInterceptor('file'))
   @Post('upload')
   async uploadFile(
-    @Body() body: UploadTimeReportDto,
     @UploadedFile(
       new ParseFilePipeBuilder()
-        .addFileTypeValidator({
-          fileType: 'csv',
-        })
-        .build({
-          fileIsRequired: true,
-        }),
+        .addFileTypeValidator({ fileType: 'csv' })
+        .build({ fileIsRequired: true }),
     )
     file: Express.Multer.File,
   ) {
@@ -74,6 +62,14 @@ export class TimeReportsController {
       .replace('.csv', '')
       .split('-');
     const timeReportId = +filenameParts[filenameParts.length - 1];
+
+    // Ensure the report is not already saved
+    if (await this.timeReportsService.findOne(timeReportId)) {
+      throw new BadRequestException(
+        `Time report id ${timeReportId} has already been uploaded`,
+        { description: 'Time report id must be unique' },
+      );
+    }
 
     // Parse the CSV file
     const content = await Papa.parse(file.buffer.toString(), {
@@ -93,8 +89,6 @@ export class TimeReportsController {
         };
       },
     );
-
-    console.log(entries);
 
     return this.timeReportsService.create({
       id: timeReportId,

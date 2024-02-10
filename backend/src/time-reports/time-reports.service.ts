@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
-import { UpdateTimeReportDto } from './dto/update-time-report.dto';
 
 @Injectable()
 export class TimeReportsService {
@@ -35,11 +34,6 @@ export class TimeReportsService {
 
   findOne(id: number) {
     return this.prisma.timeReport.findUnique({ where: { id } });
-  }
-
-  update(id: number, data: UpdateTimeReportDto) {
-    // return this.prisma.timeReport.update({ where: { id }, data });
-    return 'todo';
   }
 
   remove(id: number) {
