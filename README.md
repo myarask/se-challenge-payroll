@@ -200,9 +200,11 @@ I used Nest.js for the first time in this exercise. If this application was dest
 - A CI/CD pipeline
 - OpenAPI documentation
 - A CODEOWNERS file
-- etc..
+- And more!
 
 ### What compromises did you have to make as a result of the time constraints of this challenge?
+
+There are many, but the main I'd like to highlight is that the data is not stored efficiently for report generation. The data is stored in a single table, and the report generation is done by querying the database and applying multiple O(n) operations. This is not efficient for large datasets. In a production environment, I would store the data in a way that is optimized for different flavors of reports.
 
 ## Bonus Questions
 
