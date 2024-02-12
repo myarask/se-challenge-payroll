@@ -168,6 +168,8 @@ npm i
 npm start
 ```
 
+It will run on localhost:3000.
+
 ### Using the APIs
 
 Load the `thunder-collection-se_challenge-payroll.json` file into Postman or Thunder Client to test the API.
