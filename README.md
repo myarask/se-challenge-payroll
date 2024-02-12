@@ -72,47 +72,47 @@ We've agreed to build an API with the following endpoints to serve HTTP requests
 
 As an example, given the upload of a sample file with the following data:
 
-   | date       | hours worked | employee id | job group |
-   | ---------- | ------------ | ----------- | --------- |
-   | 4/1/2023   | 10           | 1           | A         |
-   | 14/1/2023  | 5            | 1           | A         |
-   | 20/1/2023  | 3            | 2           | B         |
-   | 20/1/2023  | 4            | 1           | A         |
+| date      | hours worked | employee id | job group |
+| --------- | ------------ | ----------- | --------- |
+| 4/1/2023  | 10           | 1           | A         |
+| 14/1/2023 | 5            | 1           | A         |
+| 20/1/2023 | 3            | 2           | B         |
+| 20/1/2023 | 4            | 1           | A         |
 
 A request to the report endpoint should return the following JSON response:
 
-   ```json
-   {
-     "payrollReport": {
-       "employeeReports": [
-         {
-           "employeeId": "1",
-           "payPeriod": {
-             "startDate": "2023-01-01",
-             "endDate": "2023-01-15"
-           },
-           "amountPaid": "$300.00"
-         },
-         {
-           "employeeId": "1",
-           "payPeriod": {
-             "startDate": "2023-01-16",
-             "endDate": "2023-01-31"
-           },
-           "amountPaid": "$80.00"
-         },
-         {
-           "employeeId": "2",
-           "payPeriod": {
-             "startDate": "2023-01-16",
-             "endDate": "2023-01-31"
-           },
-           "amountPaid": "$90.00"
-         }
-       ]
-     }
-   }
-   ```
+```json
+{
+  "payrollReport": {
+    "employeeReports": [
+      {
+        "employeeId": "1",
+        "payPeriod": {
+          "startDate": "2023-01-01",
+          "endDate": "2023-01-15"
+        },
+        "amountPaid": "$300.00"
+      },
+      {
+        "employeeId": "1",
+        "payPeriod": {
+          "startDate": "2023-01-16",
+          "endDate": "2023-01-31"
+        },
+        "amountPaid": "$80.00"
+      },
+      {
+        "employeeId": "2",
+        "payPeriod": {
+          "startDate": "2023-01-16",
+          "endDate": "2023-01-31"
+        },
+        "amountPaid": "$90.00"
+      }
+    ]
+  }
+}
+```
 
 We consider ourselves to be language agnostic here at Wave, so feel free to use any combination of technologies you see fit to both meet the requirements and showcase your skills. We only ask that your submission:
 
@@ -151,3 +151,65 @@ Evaluation of your submission will be based on the following criteria.
    they explained?
 1. Did you separate any concerns in your application? Why or why not?
 1. Does your solution use appropriate data types for the problem as described?
+
+---
+
+# Submission
+
+## Getting Started
+
+### Running the app
+
+Use npm to run the backed server locally:
+
+```bash
+cd ./backend
+npm i
+npm start
+```
+
+### Using the APIs
+
+Load the `thunder-collection-se_challenge-payroll.json` file into Postman or Thunder Client to test the API.
+
+## Questions
+
+### How did you test that your implementation was correct?
+
+I tested the implementation by manually testing the API endpoints using Thunder Client. There are test suites in place which would be populated with tests for a production application. Extra endpoints were created to delete data from the database and to retrieve all time reports from the database.
+
+### If this application was destined for a production environment, what would you add or change?
+
+I used Nest.js for the first time in this exercise. If this application was destined for a production environment, I would add the following:
+
+- Test coverage for all controllers and services
+- Caching
+- Optimized Report Management
+- Versioning for the API endpoints
+- Strict validation for API inputs
+- Colocated type definitions
+- Explicit type casting on controllers
+- Error handling middleware
+- Logging middleware
+- Rate limiting middleware
+- Authentication middleware
+- Authorization middleware
+- A production-ready database (Not Sqlite)
+- A CI/CD pipeline
+- OpenAPI documentation
+- A CODEOWNERS file
+- etc..
+
+### What compromises did you have to make as a result of the time constraints of this challenge?
+
+## Bonus Questions
+
+### What design decisions did you make when designing your models/entities?
+
+For this exercise, I separated the data in the report into two models: TimeReport and TimeReportEntry. The TimeReport model represents the CSV file, and the TimeReportEntry model represents the data in the CSV file. The TimeReport model has a one-to-many relationship with the TimeReportEntry model.
+
+This decision makes it trivial to store metadata about the CSV file, such as the file name and the date it was uploaded, and to store the data in the CSV file in a separate model. The TimeReportEntry's are organized in a way that is easy to query, filter, sort, and aggregate.
+
+### Did you separate any concerns in your application?
+
+In this application, controllers are responsible for handling HTTP requests, services are responsible for handling business logic and data access, and models are responsible for representing the data in the database. This separation of concerns makes the application easy to understand, test, and maintain.
