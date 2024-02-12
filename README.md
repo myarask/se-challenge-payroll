@@ -163,6 +163,8 @@ Evaluation of your submission will be based on the following criteria.
 Use npm to run the backed server locally:
 
 ```bash
+# Node v20
+# npm v10
 cd ./backend
 npm i
 npm start
