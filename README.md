@@ -187,6 +187,7 @@ I tested the implementation by manually testing the API endpoints using Thunder 
 I used Nest.js for the first time in this exercise. If this application was destined for a production environment, I would add the following:
 
 - Test coverage for all controllers and services
+- Use more efficient runtime
 - Caching
 - Optimized Report Management
 - Versioning for the API endpoints
